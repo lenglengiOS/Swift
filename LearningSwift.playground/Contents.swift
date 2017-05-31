@@ -206,37 +206,222 @@ _ = {
 }
 
 // 9.可选类型
-// * swift中规定:对象中的任何属性在创建时都必须有明确的初始化值
-class Student : NSObject {
-
-}
-// 1>.定义可选类型
-var name : Optional<String> = nil
-var name1 : String? = nil
-// 2>.给可选类型赋值
-name1 = "lhl"
-// 3>.取出可选类型中的值
-// 4>.注意: 可选类型 + ! 就是强制解包
-print(name1!)
-// 5>.注意:强制解包是非常危险的,如果可选类型为nil,强制解包系统会崩溃,所以解包之前应该先判断可选类型是否为nil
-if name1 != nil {
+_ = {
+    // * swift中规定:对象中的任何属性在创建时都必须有明确的初始化值
+    class Student : NSObject {
+        
+    }
+    // 1>.定义可选类型
+    var name : Optional<String> = nil
+    var name1 : String? = nil
+    // 2>.给可选类型赋值
+    name1 = "lhl"
+    // 3>.取出可选类型中的值
+    // 4>.注意: 可选类型 + ! 就是强制解包
     print(name1!)
+    // 5>.注意:强制解包是非常危险的,如果可选类型为nil,强制解包系统会崩溃,所以解包之前应该先判断可选类型是否为nil
+    if name1 != nil {
+        print(name1!)
+    }
+    // 6>.可选绑定
+    if let tempName = name1 {
+        print(tempName)
+        print(tempName)
+        print(tempName)
+        print(tempName)
+        print(tempName)
+    }
+    if let name1 = name1 {
+        print(name1)
+        print(name1)
+        print(name1)
+        print(name1)
+        print(name1)
+    }
+    // 7>.应用场景
+    let url : NSURL? = NSURL(string: "www.baidu.com")
+    if let url = url {
+        let reuqest = NSURLRequest(url: url as URL)
+    }
 }
-// 6>.可选绑定
-if let tempName = name1 {
-    print(tempName)
-    print(tempName)
-    print(tempName)
-    print(tempName)
-    print(tempName)
+
+// 10.函数
+_ = {
+    // 1>.没有参数没有返回值
+    func about() -> Void {
+        print("关于...")
+    }
+    about()
+    func about1() {
+        print("iohne8")
+    }
+    about1()
+    // 2>.有参数没有返回值
+    func callPhone(PhoneNum: String) {
+        print("打电话给"+PhoneNum)
+    }
+    callPhone(PhoneNum: "15680222613")
+    // 3>.没有参数有返回值
+    func hello() -> String {
+        return "你吃饭了嘛?"
+    }
+    let H = hello()
+    print(H)
+    // 4>.有参数有返回值
+    func sum(num1:Int, num2:Int) -> Int {
+        return num1 + num2
+    }
+    sum(num1: 10, num2: 20)
+    // 5>.函数的使用注意
+    // 注意一:内部参数和外部参数
+    // 注意二:默认参数
+    func makeCoffee(coffeeName: String = "雀巢") -> String {
+        return "我想要喝一杯\(coffeeName)咖啡"
+    }
+    makeCoffee(coffeeName: "猫屎")
+    makeCoffee(coffeeName: "拿铁")
+    makeCoffee()
+    // 注意三:可变参数,参数的个数可变
+    func addNum(nums:Int...) -> Int {
+        var result = 0
+        for n in nums {
+            result += n
+        }
+        return result
+    }
+    addNum(nums: 10, 20, 35)
+    // 注意四:指针类型
+    var m = 20
+    var n = 30
+    func swamp( m: inout Int, n: inout Int) {
+        let temp = m
+        m = n
+        n = temp
+    }
+    swamp(m: &m, n: &n)
+    print(m)
+    print(n)
+    // 注意五:函数的嵌套使用(了解)
 }
-if let name1 = name1 {
-    print(name1)
-    print(name1)
-    print(name1)
-    print(name1)
-    print(name1)
+
+// 11.类的使用
+_ = {
+    // 1>.类的属性:存储属性,计算属性,类属性
+    class Person {
+        // 存储属性
+        var age = 20.0
+        var age1 = 340.0
+        
+        // 计算属性
+        var averageAge : Double {
+            return (age + age1) * 0.5
+        }
+        
+        // 类属性
+        static var legs : Int = 0
+    }
+    let p = Person()
+    p.age
+    p.age1
+    p.averageAge
+    Person.legs = 2
+    // 2>.类的构造函数
+    class Job : NSObject {
+        var name : String?
+        var age = 0
+        override init(){
+            // 在构造函数中,如果没有明确super.init,那么系统会自动调用super.init()
+            // super.init()
+            print("------")
+        }
+        
+        // 自定义构造函数
+        init(name : String, age : Int) {
+            self.name = name
+            self.age = age
+        }
+        
+        init(dict: [String : AnyObject]) {
+            super.init()
+            setValuesForKeys(dict)
+        }
+        
+        override func setValue(_ value: Any?, forUndefinedKey key: String) {
+            
+        }
+    }
+    
+    let J = Job()
+    let J1 = Job()
+    let J2 = Job()
+    let J3 = Job(name: "冷洪林", age: 10)
+    J3.name
+    J3.age
+    let J4 = Job(dict: ["name": "lhl" as AnyObject, "age": 10 as AnyObject, "heigt": 1.88 as AnyObject])
+    print(J4.age)
+    if let name = J4.name {
+        print(name)
+    }
+    // 3>.类的属性监听器
+    class Cell : NSObject {
+        var name : String? {
+            // 属性即将改变的时候进行监听
+            willSet{
+                if let newValue = newValue {
+                    print("属性即将改变,新值为:\(newValue)")
+                }
+            }
+            // 属性已经改变时进行监听
+            didSet{
+                if let oldValue = oldValue {
+                    print("属性已经改变,旧值为:\(oldValue)")
+                }
+            }
+        }
+    }
+    
+    var cell = Cell()
+    cell.name = "lhl"
+    cell.name = "冷洪林"
 }
+
+// 12.闭包
+_ = {
+    // 1>.block的使用(代码见"./01-block")
+    // 2>.闭包的使用(代码见"./02-闭包的使用")
+    // 3>.尾随闭包:如果闭包作为方法的最后一个参数,那么闭包可以将()省略掉
+}
+
+// 13.懒加载
+_ = {
+    //初始化并且分配空间，会提前创建
+    //移动开发，延迟加载，减少内存消耗，就是懒加载
+    //懒加载 - lazy
+    /**
+     1.能够延迟创建
+     2.能够解除解包的烦恼（最大的好处）
+     */
+    
+    //懒加载简单写法
+    // lazy var label : UIView = UIView();
+    //懒加载完整写法，实际是一个闭包，日常开发不建议这么写
+    /**
+     1. {} 包装代码
+     2. () 执行代码
+     
+     日常开发：
+     1.闭包中智能提示不灵敏
+     2.出现self.还需要注意循环引用
+     */
+    //    lazy var label = { () -> DemoLabel in
+    //        var l = DemoLabel();
+    //
+    //        //设置label的属性....
+    //
+    //        return l;
+    //    }()
+}
+
 
 
 
